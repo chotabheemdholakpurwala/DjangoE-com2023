@@ -8,18 +8,27 @@ import OrderPage from './OrderPage';
 import HomeCollections from '../components/HomeCollections';
 import Collections from '../components/Collections';
 import Footer from '../components/Footer';
+import AccountPage from './AccountPage';
+import Order from '../components/Order';
+
+
 
 export default function Homepage() {
+
+  
+
   return (
     <div className='HomePage'>
       <Navigation />
+      
       <Routes key='1'>
         <Route path='/*' element={<HomeCollections />} />
         <Route path='/collections/*' element={<Collections />} />
         <Route path='/products/*' element={<Products />} />
         <Route path='/search/*' element={<Search />} />
         <Route path='/carts/*' element={<CartPage />} />
-        <Route path='/orders/*' element={<OrderPage />} />
+        <Route path='/accounts/*' element={<AccountPage />} />
+        <Route path='/order/*' element={<Order />} />
       </Routes>
       <Footer />
     </div>

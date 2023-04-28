@@ -21,11 +21,21 @@ export default function Products() {
     setCount(data.count);
     setPrevious(data.previous);
     setNext(data.next);
+    console.log(data);
   }
 
   return (
       <Routes>
-        <Route path='/' element={<ProductsList products={products} count={count} previous={previous} next={next} />} />
+        <Route path='/' element={<ProductsList 
+          products={products} 
+          setProducts={setProducts} 
+          count={count} 
+          setCount={setCount} 
+          previous={previous} 
+          setPrevious={setPrevious} 
+          next={next} 
+          setNext={setNext} 
+        />} />
         <Route path='/:id' element={<Product />} />
       </Routes>
   )

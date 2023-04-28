@@ -12,11 +12,17 @@ from rest_framework.authentication import *
 from .permissions import *
 from rest_framework_simplejwt.authentication import *
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 # Create your views here.
 class CustomerViewSet(ModelViewSet):
     serializer_class = CustomerSerializer
-    queryset = Customer.objects.all()
+    
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Customer.objects.filter(user=self.request.user)
+        else:
+            return Customer.objects.all()
 
 class AddressViewSet(ModelViewSet):
     serializer_class = AddressSerializer
@@ -36,10 +42,10 @@ class ProductViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
     
     def get_queryset(self):
-        queryset = Product.objects.all()
+        queryset = Product.objects.all().select_related('collection')
         search_query = self.request.query_params.get('q', None)
         if search_query is not None:
-            queryset = queryset.filter(title__icontains=search_query)
+            queryset = queryset.filter(Q(title__icontains=search_query) | Q(collection__title__icontains=search_query))
         return queryset
 
     # def list(self, request, *args, **kwargs):
@@ -69,9 +75,7 @@ class CartViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         user = request.user
-        if not Cart.objects.filter(user=user).exists():
-            cart = Cart.objects.create(user=user)
-        cart = Cart.objects.get(user=user)
+        (cart, created) = Cart.objects.get_or_create(user=user)
         serializer = CartSerializer(cart)
         return Response(serializer.data)
 
@@ -104,6 +108,7 @@ class ProductImageViewSet(ModelViewSet):
 
 class OrderViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+    permission_classes = [IsAuthenticated]
  
     def create(self, request, *args, **kwargs):
         serializer = CreateOrderSerializer(
@@ -122,8 +127,39 @@ class OrderViewSet(ModelViewSet):
         return OrderSerializer
 
     def get_queryset(self):
-        
-        return Order.objects.all()
+        customer = Customer.objects.get(user=self.request.user)
+        return Order.objects.filter(customer=customer).prefetch_related('items__product').select_related('address')
+
+class WishlistViewSet(ModelViewSet):
+    serializer_class = WishlistSerializer
+    
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Wishlist.objects.prefetch_related('items__product').filter(user=self.request.user)
+        else:
+            return Wishlist.objects.prefetch_related('items__product').all()
+    
+    def create(self, request, *args, **kwargs):
+        user = self.request.user
+        (wishlist, created) = Wishlist.objects.get_or_create(user=user)
+        serializer = WishlistSerializer(wishlist)
+        print(wishlist)
+        return Response(serializer.data)
+
+class WishlistItemViewSet(ModelViewSet):
+    queryset = WishlistItem.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return AddWishlistItemSerializer
+        return WishlistItemSerializer
+    
+    def get_serializer_context(self):
+        return {'wishlist_id': self.kwargs['wishlist_pk']}
+
+
+
+
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response

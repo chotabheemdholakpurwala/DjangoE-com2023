@@ -4,7 +4,7 @@ import axios from 'axios';
 const CollectionsList = () => {
   const [collections, setCollections] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); 
-  const [pagesize, setPagesize] = useState(1);
+  const pagesize = 10;
   const [count, setCount] = useState(0);
 
   useEffect(() => {

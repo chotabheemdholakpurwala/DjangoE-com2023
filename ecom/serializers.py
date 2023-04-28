@@ -18,13 +18,19 @@ class ProductImageSerializer(ModelSerializer):
         model = ProductImage
         fields = ['id', 'image', 'product']
 
+class CollectionImageSerializer(ModelSerializer):
+    class Meta:
+        model = CollectionImage
+        fields = ['id', 'image', 'collection']
+
 class CollectionSerializer(ModelSerializer):
     products_count = serializers.IntegerField(read_only=True)
     products = ProductSerializer(many=True)
+    images = CollectionImageSerializer(many=True)
 
     class Meta:
         model = Collection
-        fields = ['id', 'title', 'products_count', 'products']
+        fields = ['id', 'title', 'products_count', 'products', 'images']
 
 class CollectionImageSerializer(ModelSerializer):
     class Meta:
@@ -33,7 +39,7 @@ class CollectionImageSerializer(ModelSerializer):
 
 class CartItemSerializer(ModelSerializer):
     total_price = serializers.SerializerMethodField(method_name='get_total_price')
-    product = SimpleProductSerializer(read_only=True)
+    product = ProductSerializer(read_only=True)
 
     def get_total_price(self, cart_item:CartItem):
         return cart_item.quantity*cart_item.product.unit_price
@@ -46,6 +52,7 @@ class CartSerializer(ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     total_price = serializers.SerializerMethodField(method_name='get_total_price')
     items = CartItemSerializer(many=True, read_only=True)
+    items_count = serializers.SerializerMethodField(method_name='get_items_count')
 
     def get_total_price(self, cart : Cart):
         total = 0
@@ -53,9 +60,13 @@ class CartSerializer(ModelSerializer):
             total += item.quantity * item.product.unit_price
         return total
 
+    def get_items_count(self, cart:Cart):
+        count = cart.items.all().count()
+        return count
+
     class Meta:
         model = Cart
-        fields = ['id', 'created_at', 'items', 'total_price']
+        fields = ['id', 'created_at', 'items', 'total_price', 'items_count']
 
 class UpdateCartItemSerialzer(ModelSerializer):
     class Meta:
@@ -114,10 +125,17 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
     address = AddressSerializer()
+    price = serializers.SerializerMethodField(method_name='calc_price')
 
     class Meta:
         model = Order
-        fields = ['id', 'customer', 'placed_at', 'payment_status', 'items', 'address']
+        fields = ['id', 'customer', 'placed_at', 'payment_status', 'items', 'address', 'price']
+    
+    def calc_price(self, order:Order):
+        price = 0
+        for item in order.items.all():
+            price += item.quantity * item.unit_price
+        return price
 
 class UpdateOrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -163,4 +181,30 @@ class CreateOrderSerializer(serializers.Serializer):
             return order
 
 
-            
+class WishlistItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        model = WishlistItem
+        fields = ['id', 'product']
+
+class WishlistSerializer(serializers.ModelSerializer):
+    items = WishlistItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Wishlist
+        fields = ['id', 'title', 'date', 'items']
+
+class AddWishlistItemSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField()
+
+    class Meta:
+        model = Wishlist
+        fields = ['id', 'product_id']
+
+    def save(self, **kwargs):
+        wishlist_id = self.context['wishlist_id']
+        product_id = self.validated_data['product_id']
+        if WishlistItem.objects.filter(wishlist_id=wishlist_id, product_id=product_id).exists():
+            return WishlistItem.objects.get(wishlist_id=wishlist_id, product_id=product_id)
+        return WishlistItem.objects.create(wishlist_id=wishlist_id, product_id=product_id)

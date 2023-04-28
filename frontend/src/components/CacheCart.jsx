@@ -58,7 +58,6 @@ export default function CacheCart() {
     } else {
       setCartItems([...cart]);
       localStorage.setItem('cart', JSON.stringify(cart));
-
       const updatedProducts = products.map((item) => {
         if (item.id === id) {
           return { ...item, quantity: parseInt(quantity) };
@@ -81,7 +80,6 @@ export default function CacheCart() {
 
   return (
     <div>
-      CacheCart
       {products.map((item) => {
         return (
           <div className='cart-item' key={item.id}>
@@ -92,8 +90,10 @@ export default function CacheCart() {
             >
               <ProductImage product_id={item.id} />
             </Link>
-            <div>
-              <h3>{item.title}</h3>
+            <h3>{item.title}</h3>
+            <div className='item'>
+              
+              <h3>{item.unit_price}</h3>
               <input
                 type='number'
                 value={item.quantity}

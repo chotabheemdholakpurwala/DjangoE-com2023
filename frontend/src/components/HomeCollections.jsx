@@ -3,11 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import ProductsList from './ProductsList';
 import CollectionImage from './CollectionImage';
+import ImageSlider from '../components/ImageSlider';
+import cart from '../icons/cart.svg';
+import heart from '../icons/heart.svg';
+import orders from '../icons/orders-icon.svg';
 
 export default function HomeCollections() {
   const [collections, setCollections] = useState([]);
   const [products, setProducts] = useState([]);
   const [showmore, setShowMore] = useState(null);
+  const images = [cart, heart, orders];
 
   useEffect(() => {
     fetchCollectionsAndProducts();
@@ -42,8 +47,26 @@ export default function HomeCollections() {
   }
 
   return (
-    <div className='homepage-collections'>
+    <>
+    <div className='homepage-list'>
       {collections.map((collection) => {
+        const collectionProducts = products[collection.id] || [];
+        // Limit the products list to 3
+        const limitedProducts = collectionProducts.slice(0, 5);
+
+        return (
+          <Link to={`/collections/${collection.id}`} key={collection.id} style={{textDecoration: 'none', color: 'black', fontWeight: '500'}}>
+            <div>
+              <CollectionImage id={collection.id} />
+              {collection.title}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+    <ImageSlider images={images} />
+    <div className='homepage-collections'>
+      {collections.slice(0, 3).map((collection) => {
         // Get the products list for the current collection
         const collectionProducts = products[collection.id] || [];
         // Limit the products list to 3
@@ -67,5 +90,6 @@ export default function HomeCollections() {
         );
       })}
     </div>
+    </>
   );
 }

@@ -18,7 +18,8 @@ export default function ProductImages({id}) {
   return (
     <div className='all-images'>
       {images.map((image) => {
-        return (<img key={image} src={'http://127.0.0.1:8000'+image?.image} alt="some-image" />);
+        return (
+        <div><img key={image} src={'http://127.0.0.1:8000'+image?.image} alt="some-image" /></div>);
       })}
     </div>
   )
