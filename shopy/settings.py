@@ -92,10 +92,10 @@ WSGI_APPLICATION = 'shopy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shopy2',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'NAME': 'kbbquubi',
+        'USER': 'kbbquubi',
+        'PASSWORD': 'zr0uwfKV-0R4Lhotp71XZrqVPCUkUHSA',
+        'HOST': 'john.db.elephantsql.com',
     }
 }
 
