@@ -2,8 +2,10 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import jwt_decode from 'jwt-decode';
 
-axios.defaults.baseURL = 'http://localhost:8000/';
 
+
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_BASE_URL || 'http://localhost:8000/';
+console.log(process.env.REACT_APP_BACKEND_BASE_URL);
 axios.interceptors.request.use(function (config) {
   const access_token = localStorage.getItem('access_token');
   
