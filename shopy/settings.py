@@ -63,7 +63,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'shopy.urls'
 
