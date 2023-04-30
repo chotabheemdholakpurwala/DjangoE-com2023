@@ -170,7 +170,7 @@ def transfer_cart_data(request):
     # Retrieve cart data from local storage
     cart_data = request.data.get('cart')  # Assuming the cart data is sent as JSON in the request body
     user_id = request.data.get('user_id')
-    print('$$$$$$$$$$$$$$$$$$$$$$$$$-')
+    print('$$$$$$$$$$$$$$$$$$$$$$$$$---')
     # Check if cart data is available
     if cart_data:
         cart = None
