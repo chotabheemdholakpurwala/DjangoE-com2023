@@ -181,14 +181,14 @@ def transfer_cart_data(request):
         for item in cart_data:
             product = item['product']
             print(product, item['quantity'])
-            if CartItem.objects.filter(cart=cart, product_id=product.id).exists():
+            if CartItem.objects.filter(cart=cart, product_id=product['id']).exists():
                 # If product already exists in cart, update the quantity
-                cart_item = CartItem.objects.get(cart=cart, product_id=product.id)
+                cart_item = CartItem.objects.get(cart=cart, product_id=product['id'])
                 cart_item.quantity += item['quantity']
                 cart_item.save()
             else:
                 # If product doesn't exist in cart, create a new cart item
-                cart_item = CartItem.objects.create(cart=cart, product_id=product.id, quantity=item['quantity'])
+                cart_item = CartItem.objects.create(cart=cart, product_id=product['id'], quantity=item['quantity'])
         
         return Response({'message': 'Cart data transferred to database successfully.'})
     else:
