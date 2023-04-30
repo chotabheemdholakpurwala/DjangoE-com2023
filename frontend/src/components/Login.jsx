@@ -32,7 +32,7 @@ export const Login = () => {
       let access_token = localStorage.getItem('access_token');
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       alert('User logged in.');
-      console.log(decoded);
+      window.location.href = "/";
     } catch (e) {
         setInvalid(true);
       }

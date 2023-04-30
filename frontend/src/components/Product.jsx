@@ -27,13 +27,13 @@ export default function Product() {
         console.log(user.cart);
         let cart_id = user.cart;
         if(user.cart === null) {
-          const {data} = await axios.post('/carts/');
+          const {data} = await axios.post('carts/');
           cart_id = data.id;
           console.log('Cart Created!!!');
           updateUser({ ...user, cart: data.id });
         }
         const quantity = 1;
-        await axios.post(`http://127.0.0.1:8000/carts/${cart_id}/items/`, { product_id: id, quantity: quantity });
+        await axios.post(`carts/${cart_id}/items/`, { product_id: id, quantity: quantity });
         console.log('POST request successful');
         alert("Product Added To Cart");
       }

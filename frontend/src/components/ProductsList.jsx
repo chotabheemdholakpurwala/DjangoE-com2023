@@ -16,7 +16,7 @@ export default function ProductsList({ products, setProducts, count, setCount, p
     console.log(products);
   }, [products]);
 
-  async function addToCart(id, event) {
+  async function addToCart(id, event, product) {
     event.preventDefault();
     event.stopPropagation();
     try {
@@ -34,15 +34,15 @@ export default function ProductsList({ products, setProducts, count, setCount, p
       else {
         let cart = localStorage.getItem('cart');
         if(!cart) {
-          cart = [{product_id: id, quantity: 1}];
+          cart = [{product: product, quantity: 1}];
         }
         else {
           cart = JSON.parse(cart); // Parse the cart data from localStorage
-          const existingItem = cart.find(item => item.product_id === id);
+          const existingItem = cart.find(item => item.product.id === id);
           if (existingItem) {
             existingItem.quantity += 1; // Increase quantity by one
           } else {
-            cart = cart.concat([{ product_id: id, quantity: 1 }]);
+            cart = cart.concat([{ product: product, quantity: 1 }]);
           }
         }
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -55,10 +55,14 @@ export default function ProductsList({ products, setProducts, count, setCount, p
   async function addToWishlist(id, event) {
     event.preventDefault();
     event.stopPropagation();
-    const {data} = await axios.post('wishlists/');
-    updateUser({ ...user, wish_list: data.id });
-    await axios.post(`wishlists/${data.id}/items/`, {product_id: id});
-
+    if(user) {
+      const {data} = await axios.post('wishlists/');
+      updateUser({ ...user, wish_list: data.id });
+      await axios.post(`wishlists/${data.id}/items/`, {product_id: id});
+    }
+    else {
+      alert("Login to Add Products to Wishlist");
+    }
   }
 
   async function handlePageChange(pageNumber) {
@@ -83,7 +87,7 @@ export default function ProductsList({ products, setProducts, count, setCount, p
                   <button id='add-to-wishlist' onClick={(event) => addToWishlist(product.id, event)}>
                     <img className='add-to-cart-icon' src={AddToWishlist} />
                   </button>
-                  <button id='add-to-cart' onClick={(event) => addToCart(product.id, event)}>
+                  <button id='add-to-cart' onClick={(event) => addToCart(product.id, event, product)}>
                     <img className='add-to-cart-icon' src={AddToCartIcon} />
                   </button>
                   <ProductImage product_id={product.id} image={product.images[0]} />
