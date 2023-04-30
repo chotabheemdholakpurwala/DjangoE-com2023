@@ -180,7 +180,7 @@ def transfer_cart_data(request):
             cart = Cart.objects.create(user_id=user_id)
         for item in cart_data:
             product = item['product']
-            print(product.id)
+            print(product)
             if CartItem.objects.filter(cart=cart, product_id=product.id).exists():
                 # If product already exists in cart, update the quantity
                 cart_item = CartItem.objects.get(cart=cart, product_id=product.id)
