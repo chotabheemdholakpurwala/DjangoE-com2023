@@ -7,7 +7,8 @@ export default function ProductImages({id, images}) {
 
   useEffect(() => {
     getImages();
-  }, [id]);
+    console.log(images);
+  }, [id, images]);
 
   const getImages = async () => {
     // const {data} = await axios.get(`products/${id}/images`);
@@ -17,9 +18,9 @@ export default function ProductImages({id, images}) {
 
   return (
     <div className='all-images'>
-      {images.map((image) => {
+      {images && images.map((image) => {
         return (
-        <div><img key={image} src={'https://shopibackend-vanshchaudhary6993.b4a.run'+image?.image} alt="some-image" /></div>);
+        <div><img key={image} src={image?.image} alt="some-image" /></div>);
       })}
     </div>
   )

@@ -14,6 +14,10 @@ export default function Navigation() {
   const [searchtxt, setSearchTxt] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   async function fetchProducts(e) {
     e.preventDefault();
     navigate(`/search?q=${searchtxt}`);

@@ -19,7 +19,7 @@ function App() {
       try {
         let access_token = localStorage.getItem('access_token');
         let decoded = jwt_decode(access_token);
-        let response = await axios.get(`http://127.0.0.1:8000/main/users/${decoded.user_id}`);
+        let response = await axios.get(`main/users/${decoded.user_id}`);
         updateUser(response.data);
       } catch (e) {
         setUser(null);

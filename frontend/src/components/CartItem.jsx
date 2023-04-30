@@ -15,11 +15,12 @@ export default function CartItem({cart_id}) {
 
   async function getItems() {
     if(cart_id !== null) {
-      const {data} = await axios.get(`/carts/${cart_id}/items`);
-      setItems(data);
+      // const {data} = await axios.get(`/carts/${cart_id}/items`);
+      // setItems(data);
       const response = await axios.get(`carts/${cart_id}`);
       setCart(response.data);
       console.log(response.data);
+      setItems(response.data.items);
     }
   }
 
@@ -81,7 +82,7 @@ export default function CartItem({cart_id}) {
           return (
               <div className='cart-item' key={item.id}>
                 <Link key={item.id} to={`/products/${item.product.id}`} style={{ textDecoration: 'none', height: '100%', color: 'black' }}>
-                  <ProductImage product_id={item.product.id} />
+                  <ProductImage product_id={item.product.id} image={item.product.images[0]} />
                 </Link>
                 <h3>{item.product.title}</h3>
                 <div className='item'>

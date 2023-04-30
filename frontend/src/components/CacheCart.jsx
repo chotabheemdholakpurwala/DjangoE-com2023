@@ -88,7 +88,7 @@ export default function CacheCart() {
               to={`/products/${item.id}`}
               style={{ textDecoration: 'none', height: '100%', color: 'black' }}
             >
-              <ProductImage product_id={item.id} />
+              <ProductImage product_id={item.id}  />
             </Link>
             <h3>{item.title}</h3>
             <div className='item'>

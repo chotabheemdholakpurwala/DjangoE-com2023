@@ -55,18 +55,18 @@ export default function HomeCollections() {
         const collectionProducts = products[collection.id] || [];
         // Limit the products list to 3
         const limitedProducts = collectionProducts.slice(0, 5);
-
+        console.log(collection);
         return (
           <Link to={`/collections/${collection.id}`} key={collection.id} style={{textDecoration: 'none', color: 'black', fontWeight: '500'}}>
             <div>
-              <CollectionImage id={collection.id} />
+              <CollectionImage id={collection.id} image={collection.images[0]} />
               {collection.title}
             </div>
           </Link>
         );
       })}
     </div>
-    <ImageSlider images={collections.images} />
+    <ImageSlider collections={collections} />
     <div className='homepage-collections'>
       {collections.slice(0, 3).map((collection) => {
         // Get the products list for the current collection
@@ -84,10 +84,10 @@ export default function HomeCollections() {
               </div>
             </Link>
             <ProductsList products={limitedProducts} />
-            {showmore[collection.id] && <ProductsList products={collectionProducts.slice(5)} />}
+            {/* {showmore[collection.id] && <ProductsList products={collectionProducts.slice(5)} />}
             {hasMoreProducts && (
               <button onClick={() => handleShowMore(collection.id)}>more...</button>
-            )}
+            )} */}
           </div>
         );
       })}

@@ -28,7 +28,7 @@ export default function ProductsList({ products, setProducts, count, setCount, p
           updateUser({ ...user, cart: data.id });
         }
         const quantity = 1;
-        await axios.post(`http://127.0.0.1:8000/carts/${cart_id}/items/`, { product_id: id, quantity: quantity });
+        await axios.post(`carts/${cart_id}/items/`, { product_id: id, quantity: quantity });
         alert("Product Added To Cart");
       }
       else {
@@ -55,7 +55,7 @@ export default function ProductsList({ products, setProducts, count, setCount, p
   async function addToWishlist(id, event) {
     event.preventDefault();
     event.stopPropagation();
-    const {data} = await axios.post('/wishlists/');
+    const {data} = await axios.post('wishlists/');
     updateUser({ ...user, wish_list: data.id });
     await axios.post(`wishlists/${data.id}/items/`, {product_id: id});
 
@@ -77,7 +77,7 @@ export default function ProductsList({ products, setProducts, count, setCount, p
         {products?.map((product) => {
           const title = product.title.length > 20 ? (product.title.slice(0, 20)+'...'):product.title;
           return (
-            <Link key={product.id} to={`/products/${product.id}`} style={{ textDecoration: 'none', height: '100%', color: 'black' }}>
+            <Link key={product.id} to={`products/${product.id}`} style={{ textDecoration: 'none', height: '100%', color: 'black' }}>
               <div className='products'>
                 <div className='image-container'>
                   <button id='add-to-wishlist' onClick={(event) => addToWishlist(product.id, event)}>

@@ -15,15 +15,16 @@ export default function SignupPage() {
     }
     else {
       try {
-        const {data} = await axios.post('/main/users/', {
+        const {data} = await axios.post('main/users/', {
           username: username, email: email, password: password
         });
         console.log(data);
         alert('User created!!!');
       } catch (e) {
-        console.log("Error Creating User!!!");
+        console.log("Error Creating User!!!", e);
+        alert("NOOOO");
       }
-      window.location.href = "/";
+      console.log('000000');
     }
   }
 

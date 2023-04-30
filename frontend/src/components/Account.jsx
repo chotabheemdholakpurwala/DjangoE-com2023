@@ -13,7 +13,8 @@ export default function Account() {
   }, []);
 
   async function getCustomer() {
-    const {data} = await axios.get(`customers/`);
+    const {data} = await axios.get('customers/');
+    console.log('customer', data);
     setCustomer(data[0]);
   }
   const placedAtDate = new Date(user?.date_joined);

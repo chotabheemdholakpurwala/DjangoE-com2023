@@ -5,7 +5,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 
-const ImageSlider = () => {
+const ImageSlider = ( { collections } ) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -17,17 +17,16 @@ const ImageSlider = () => {
     arrows: false,
   };
 
-  const [collections, setCollections] = useState([]);
 
   useEffect(() => {
-    (async() => {
-      const {data} = await axios.get('collections/');
-      setCollections(data.results);
-      collections.map((collection) => {
-        return console.log(collection.images[0].image);
-      })
-    })();
-  }, []);
+    // (async() => {
+    //   const {data} = await axios.get('collections/');
+    //   setCollections(data.results);
+    //   collections.map((collection) => {
+    //     return console.log(collection.images[0].image);
+    //   })
+    // })();
+  }, [collections]);
 
 
   return (

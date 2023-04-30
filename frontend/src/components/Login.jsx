@@ -16,7 +16,7 @@ export const Login = () => {
     };
     // Create the POST requuest
     try {
-      const { data } = await axios.post("token/", user,
+      const { data } = await axios.post("/token/", user,
       {headers: {'Content-Type': 'application/json'}},
                     {withCredentials: true});
 
@@ -31,7 +31,8 @@ export const Login = () => {
       localStorage.setItem("refresh_token", data.refresh);
       let access_token = localStorage.getItem('access_token');
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-      window.location.href = "/";
+      alert('User logged in.');
+      console.log(decoded);
     } catch (e) {
         setInvalid(true);
       }

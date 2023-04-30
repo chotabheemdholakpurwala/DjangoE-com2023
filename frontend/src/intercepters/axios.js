@@ -34,7 +34,7 @@ axios.interceptors.response.use(function (response) {
         const expirationTime = dayjs.unix(exp);
 
         if (expirationTime.diff(dayjs()) > 1) {
-          const response = await axios.post('/token/refresh/', {
+          const response = await axios.post('token/refresh/', {
             refresh: refresh_token
           });
 
