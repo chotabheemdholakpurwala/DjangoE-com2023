@@ -20,7 +20,7 @@ export default function CacheCart() {
   async function getProducts(cart_items) {
     try {
       const productPromises = cart_items.map(async (item) => {
-        let { data } = await axios.get(`products/${item.product_id}`);
+        let { data } = await axios.get(`products/${item.product.id}`);
         data.quantity = item.quantity;
         return data;
       });
@@ -44,10 +44,10 @@ export default function CacheCart() {
       return;
     }
     let cart = cart_items;
-    const existingItem = cart.find((item) => item.product_id === id);
+    const existingItem = cart.find((item) => item.product.id === id);
     existingItem.quantity = parseInt(quantity);
     if (quantity === '0') {
-      cart = cart.filter((item) => item.product_id !== id);
+      cart = cart.filter((item) => item.product.id !== id);
       setCartItems([...cart]);
       console.log(cart);
       const updatedProducts = products.filter((item) => item.id !== id);
@@ -72,7 +72,7 @@ export default function CacheCart() {
     console.log('hehehe');
     const inputValue = event.target.value;
     if (inputValue === '') {
-      const existingItem = cart_items.find((item) => item.product_id === id);
+      const existingItem = cart_items.find((item) => item.product.id === id);
       const previousQuantity = existingItem ? existingItem.quantity : '0';
       updateQuantity(id, previousQuantity);
     }
