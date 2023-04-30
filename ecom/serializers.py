@@ -115,14 +115,14 @@ class AddressSerializer(serializers.ModelSerializer):
     
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = SimpleProductSerializer()
+    product = ProductSerializer()
 
     class Meta:
         model = OrderItem
         fields = ['id', 'product', 'unit_price', 'quantity']
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True, read_only=True)
+    items = OrderItemSerializer(many=True)
     address = AddressSerializer()
     price = serializers.SerializerMethodField(method_name='calc_price')
 

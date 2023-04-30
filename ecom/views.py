@@ -128,7 +128,7 @@ class OrderViewSet(ModelViewSet):
 
     def get_queryset(self):
         customer = Customer.objects.get(user=self.request.user)
-        return Order.objects.filter(customer=customer).prefetch_related('items__product').select_related('address')
+        return Order.objects.filter().prefetch_related('items__product').select_related('address')
 
 class WishlistViewSet(ModelViewSet):
     serializer_class = WishlistSerializer
