@@ -62,9 +62,9 @@ export default function Product() {
     <div>
       <div className='product'>
         <div className='product-images'>
-          <ProductImages id={id} key={id} />
+          <ProductImages id={id} key={id} images={product.images} />
           <div className='image'>
-            <ProductImage product_id={id} key={id} />
+            <ProductImage product_id={id} key={id} image={product.images[0]} />
           </div>
           
         </div>

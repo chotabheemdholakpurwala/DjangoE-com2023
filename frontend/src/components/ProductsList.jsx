@@ -13,7 +13,8 @@ export default function ProductsList({ products, setProducts, count, setCount, p
   const pagesize = 10;
 
   useEffect(() => {
-  }, []);
+    console.log(products);
+  }, [products]);
 
   async function addToCart(id, event) {
     event.preventDefault();
@@ -73,7 +74,7 @@ export default function ProductsList({ products, setProducts, count, setCount, p
   return (
     <div>
       <div className='products-list'>
-        {products.map((product) => {
+        {products?.map((product) => {
           const title = product.title.length > 20 ? (product.title.slice(0, 20)+'...'):product.title;
           return (
             <Link key={product.id} to={`/products/${product.id}`} style={{ textDecoration: 'none', height: '100%', color: 'black' }}>
@@ -85,7 +86,7 @@ export default function ProductsList({ products, setProducts, count, setCount, p
                   <button id='add-to-cart' onClick={(event) => addToCart(product.id, event)}>
                     <img className='add-to-cart-icon' src={AddToCartIcon} />
                   </button>
-                  <ProductImage product_id={product.id} />
+                  <ProductImage product_id={product.id} image={product.images[0]} />
                 </div>
                 <div className='product-info'>
                   <p>{title}</p>

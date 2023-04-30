@@ -30,9 +30,11 @@ export default function Order() {
       const cart_id = user.cart;
       await axios.post('orders/', { cart_id: cart_id, address_id: selectedAddressId });
       console.log('Order Successfull!!!');
+      alert("Your Order was successfull!!");
       window.location.href = '/';
     } catch (e) {
       console.log('Error Ordering!!!', user.cart);
+      alert('Can not Order you Product(s)!!!');
     }
   }
 

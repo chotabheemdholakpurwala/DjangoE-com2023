@@ -52,7 +52,7 @@ export default function MyOrders() {
                 return (
                   <div key={item.id} className='cart-item'>
                     <div style={{height: '100%'}}>
-                      <ProductImage product_id={item.product.id} />
+                      <ProductImage product_id={item.product.id} image={product.images[0]} />
                       <span style={{marginLeft: '2px', fontSize: '18px'}}>x{item.quantity}</span>
                     </div>
                     

@@ -1,20 +1,20 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
-export default function CollectionImage({ id }) {
+export default function CollectionImage({ id, image }) {
 
-  const [image, setImage] = useState();
+  // const [image, setImage] = useState();
 
   useEffect(() => {
-    (async () => {
-      try {
-        const {data} = await axios.get(`collections/${id}/images`);
-        setImage(data[0]);
-      } catch (e) {
-        console.log(e);
-      }
+    // (async () => {
+    //   try {
+    //     const {data} = await axios.get(`collections/${id}/images`);
+    //     setImage(data[0]);
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
       
-    })();
+    // })();
   }, []);
 
   return (

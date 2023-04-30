@@ -3,20 +3,23 @@ from rest_framework import serializers
 from .models import *
 from django.db import transaction
 
+class ProductImageSerializer(ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ['id', 'image', 'product']
+
 class ProductSerializer(ModelSerializer):
+    images = ProductImageSerializer(many=True)
+
     class Meta:
         model = Product
-        fields = ['id', 'title', 'unit_price', 'inventory', 'collection']
+        fields = ['id', 'title', 'unit_price', 'inventory', 'collection', 'images']
 
 class SimpleProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'title']
 
-class ProductImageSerializer(ModelSerializer):
-    class Meta:
-        model = ProductImage
-        fields = ['id', 'image', 'product']
 
 class CollectionImageSerializer(ModelSerializer):
     class Meta:
@@ -32,10 +35,6 @@ class CollectionSerializer(ModelSerializer):
         model = Collection
         fields = ['id', 'title', 'products_count', 'products', 'images']
 
-class CollectionImageSerializer(ModelSerializer):
-    class Meta:
-        model = CollectionImage
-        fields = ['id', 'image', 'collection']
 
 class CartItemSerializer(ModelSerializer):
     total_price = serializers.SerializerMethodField(method_name='get_total_price')

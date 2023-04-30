@@ -39,7 +39,7 @@ export default function Wishlist() {
             <Link key={item.id} to={`/products/${item.product.id}`} style={{ textDecoration: 'none', height: '100%', color: 'black' }}>
               <div key={item.id} className='cart-item'>
                 <div style={{height: '100%'}}>
-                  <ProductImage product_id={item.product.id} />
+                  <ProductImage product_id={item.product.id} image={product.images[0]} />
                 </div>
                 
                 {item.product.title}

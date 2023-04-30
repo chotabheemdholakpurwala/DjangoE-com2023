@@ -7,6 +7,7 @@ import ImageSlider from '../components/ImageSlider';
 import cart from '../icons/cart.svg';
 import heart from '../icons/heart.svg';
 import orders from '../icons/orders-icon.svg';
+import CollectionsList from './CollectionsList';
 
 export default function HomeCollections() {
   const [collections, setCollections] = useState([]);
@@ -23,6 +24,7 @@ export default function HomeCollections() {
       // Fetch collections data
       const collectionsResponse = await axios.get('collections/');
       setCollections(collectionsResponse.data.results);
+      console.log(collectionsResponse.data.results);
       // Fetch products data
       let prods = {};
       let sm = {};
@@ -64,7 +66,7 @@ export default function HomeCollections() {
         );
       })}
     </div>
-    <ImageSlider images={images} />
+    <ImageSlider images={collections.images} />
     <div className='homepage-collections'>
       {collections.slice(0, 3).map((collection) => {
         // Get the products list for the current collection
@@ -77,7 +79,7 @@ export default function HomeCollections() {
           <div key={collection.id} className='collection-products'>
             <Link to={`collections/${collection.id}`} className='collection-link'>
               <div className='collection'>
-                <CollectionImage id={collection.id} />
+                <CollectionImage id={collection.id} image={collection.images[0]} />
                 <h3>{collection.title}</h3>
               </div>
             </Link>
