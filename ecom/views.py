@@ -128,7 +128,7 @@ class OrderViewSet(ModelViewSet):
 
     def get_queryset(self):
         customer = Customer.objects.get(user=self.request.user)
-        return Order.objects.filter().prefetch_related('items__product').select_related('address')
+        return Order.objects.filter(customer=customer).prefetch_related('items__product').select_related('address')
 
 class WishlistViewSet(ModelViewSet):
     serializer_class = WishlistSerializer
@@ -170,6 +170,7 @@ def transfer_cart_data(request):
     # Retrieve cart data from local storage
     cart_data = request.data.get('cart')  # Assuming the cart data is sent as JSON in the request body
     user_id = request.data.get('user_id')
+    print('$$$$$$$$$$$$$$$$$$$$$$$$$', cart_data)
     # Check if cart data is available
     if cart_data:
         cart = None
@@ -178,15 +179,14 @@ def transfer_cart_data(request):
         else:
             cart = Cart.objects.create(user_id=user_id)
         for item in cart_data:
-            product = item['product']
-            if CartItem.objects.filter(cart=cart, product_id=product.id).exists():
+            if CartItem.objects.filter(cart=cart, product_id=item['product_id']).exists():
                 # If product already exists in cart, update the quantity
-                cart_item = CartItem.objects.get(cart=cart, product_id=product.id)
+                cart_item = CartItem.objects.get(cart=cart, product_id=item['product_id'])
                 cart_item.quantity += item['quantity']
                 cart_item.save()
             else:
                 # If product doesn't exist in cart, create a new cart item
-                cart_item = CartItem.objects.create(cart=cart, product_id=product.id, quantity=item['quantity'])
+                cart_item = CartItem.objects.create(cart=cart, product_id=item['product_id'], quantity=item['quantity'])
         
         return Response({'message': 'Cart data transferred to database successfully.'})
     else:
